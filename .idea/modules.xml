@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Library/.idea/Library.iml" filepath="$PROJECT_DIR$/../Library/.idea/Library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Post_Block.iml" filepath="$PROJECT_DIR$/.idea/Post_Block.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Registration_Servis/.idea/Registration_Servis.iml" filepath="$PROJECT_DIR$/../Registration_Servis/.idea/Registration_Servis.iml" />
+    </modules>
+  </component>
+</project>
