@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
 
-from sendemail import send_email
+from send_email import send_email
 from schemas import UserSignUpSchema, UserLoginSchema
 from security import pwd_context, create_access_token
 import main

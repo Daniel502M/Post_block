@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, File, UploadFile, Form
+from fastapi.responses import FileResponse
 import shutil
 import os
 import uuid
@@ -6,25 +7,36 @@ import uuid
 from schemas import PostCreateSchema, PostUpdateSchema
 from security import pwd_context, get_current_user
 
-
 # from main import conn, cursor
 import main
 
-UPLOAD_DIR = "C:\Photo_Python\Photo_API`s"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+UPLOAD_DIR = "images"
+os.makedirs(UPLOAD_DIR, exist_ok=True)  # Создаёт папку, если её нет
+
 
 posts_router = APIRouter(tags=["Post API's"])
 
 # =============================== Post APIs ==================================
 
+
 @posts_router.post("/api/posts")
-def create_post(new_post_data: PostCreateSchema,
+def create_post(title: str = Form(...), content: str = Form(...), image: UploadFile = File(...),
                 current_user=Depends(get_current_user)):
     user_id = dict(current_user).get("user_id")
+    ext = os.path.splitext(image.filename)[-1].lower()  # Получаем расширение файла
+    unique_filename = f"{uuid.uuid4()}{ext}"  # Генерируем уникальное имя
+    file_path = os.path.join(UPLOAD_DIR, unique_filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(image.file, buffer)
+
+    image_src = unique_filename
     main.cursor.execute(
-        """INSERT INTO posts (title, content, user_id) VALUES (%s, %s, %s) RETURNING *""",
-        (new_post_data.title, new_post_data.content, user_id)
+        """INSERT INTO posts (title, content, user_id, image_src) VALUES (%s, %s, %s, %s) RETURNING *""",
+        (title, content, user_id, image_src)
     )
+
     new_post = main.cursor.fetchone()
     main.conn.commit()
 
@@ -79,3 +91,13 @@ def delete_post_by_id(post_id: int):
     main.conn.commit()
 
     return "OK"
+
+
+@posts_router.get("/download/{filename}")
+def get_photo(filename: str):
+    file_path = os.path.join(UPLOAD_DIR, filename)
+
+    if not os.path.exists(file_path):
+        return {"error": "Файл не найден"}
+
+    return FileResponse(file_path)

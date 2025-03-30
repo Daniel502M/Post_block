@@ -21,7 +21,7 @@ class Post(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
-    image = Column(String, nullable=True)
+    image_src = Column(String, nullable=True)
     created_at = Column(TIMESTAMP, nullable=False, server_default=text("now()"))
 
 

@@ -12,6 +12,9 @@ from models import Base
 
 from users import users_router
 from user_auth import users_auth_router
+from posts import posts_router
+from comments import comments_router
+from likes import likes_router
 
 
 Base.metadata.create_all(bind=engine)
@@ -47,3 +50,6 @@ def main():
 
 app.include_router(users_auth_router)
 app.include_router(users_router)
+app.include_router(posts_router)
+app.include_router(comments_router)
+app.include_router(likes_router)
