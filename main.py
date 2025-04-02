@@ -49,7 +49,7 @@ def main():
 
 
 app.include_router(users_auth_router)
-app.include_router(users_router)
-app.include_router(posts_router)
-app.include_router(comments_router)
-app.include_router(likes_router)
+# app.include_router(users_router)
+# app.include_router(posts_router)
+# app.include_router(comments_router)
+# app.include_router(likes_router)
